@@ -61,32 +61,38 @@ pip install torchvision
 
 ---
 
-## Запуск программы
+## Быстрый старт
 
-1. **Укажите путь к своему видео** (например, crowd.mp4).
-2. **Скрипт для YOLOv11**:
+### Запуск с YOLOv11
 
-```python
-from ultralytics import YOLO
-import cv2
-model = YOLO('yolo11m.pt')
-conf_threshold = 0.3  # настройте по задаче
-results = model('crowd.mp4', conf=conf_threshold, classes=[0], save=True, verbose=False)
+```bash
+python detect_people.py \
+    --model yolo \
+    --input data/crowd.mp4 \
+    --output output/yolo_result.mp4
 ```
 
-3. **Скрипт для Mask R-CNN (PyTorch):**
+### Запуск с Mask R-CNN
 
-```python
-import cv2, torch
-from torchvision.models.detection import maskrcnn_resnet50_fpn
-model = maskrcnn_resnet50_fpn(pretrained=True).eval()
-def detect(frame):
-    img = torch.from_numpy(frame).permute(2,0,1).float()/255
-    with torch.no_grad():
-        pred = model([img])[0]
-    return pred
-# Обработка видео (см. файл process_video_maskrcnn.py)
+```bash
+python detect_people.py \
+    --model maskrcnn \
+    --input data/crowd.mp4 \
+    --output output/maskrcnn_result.mp4 \
+    --conf 0.5
 ```
+
+### Кастомные настройки для турникетов (YOLOv11)
+
+```bash
+python detect_people.py \
+    --model yolo \
+    --input data/crowd.mp4 \
+    --output output/yolo_strict.mp4 \
+    --conf 0.55 \
+    --iou 0.4
+```
+
 
 4. В результате получится видео с подписанными людьми.
 - Выделение объектов — аккуратные боксы с текстовой подписью "person" и уверенность (например, person 0.89).
