@@ -109,6 +109,4 @@ python detect_people.py \
 
 ---
 
-## Связь/вопросы
 
-Контакты автора для вопросов или консультаций: <your.email@domain.com>
